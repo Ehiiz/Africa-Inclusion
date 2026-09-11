@@ -828,7 +828,8 @@ img.feature__bg,
   text-transform: uppercase; color: var(--green-deep); margin-bottom: 3px;
 }
 .footer__contact .ico-chip {
-  border-color: rgba(22,132,71,.5);
+  background: #fff;
+  border-color: #fff;
   color: var(--green-deep);
 }
 .footer__contact-value { display: block; font-size: 14.5px; color: rgba(255,255,255,.9); }

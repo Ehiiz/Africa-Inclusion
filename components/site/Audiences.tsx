@@ -13,7 +13,7 @@ export default function Audiences() {
           <div className="audiences reveal">
             <article className="aud">
               <figure className="aud__media">
-                <Image src="/assets/img/audience-banks.jpg" alt="A shop owner behind her counter taking a digital payment" width={251} height={307} />
+                <Image src="/assets/img/commercial-banks-mfis.jpg" alt="A shop owner behind her counter taking a digital payment" width={900} height={1100} />
               </figure>
               <div className="aud__body">
                 <p className="aud__tag aud__tag--green">
@@ -27,7 +27,7 @@ export default function Audiences() {
 
             <article className="aud">
               <figure className="aud__media">
-                <Image src="/assets/img/audience-fintechs.jpg" alt="Customers at a brightly lit retail payment point" width={251} height={307} />
+                <Image src="/assets/img/fintechs-payment-providers.jpg" alt="Customers at a brightly lit retail payment point" width={900} height={1100} />
               </figure>
               <div className="aud__body">
                 <p className="aud__tag aud__tag--amber">
@@ -41,7 +41,7 @@ export default function Audiences() {
 
             <article className="aud">
               <figure className="aud__media">
-                <Image src="/assets/img/audience-regulators.jpg" alt="A trader smiling while using a mobile phone at her stall" width={251} height={287} />
+                <Image src="/assets/img/regulators.jpg" alt="A trader smiling while using a mobile phone at her stall" width={900} height={1029} />
               </figure>
               <div className="aud__body">
                 <p className="aud__tag aud__tag--red">
@@ -55,7 +55,7 @@ export default function Audiences() {
 
             <article className="aud">
               <figure className="aud__media">
-                <Image src="/assets/img/audience-dfis.jpg" alt="A mother and child outside a rural home" width={251} height={307} />
+                <Image src="/assets/img/development-finance-institutions.jpg" alt="A mother and child outside a rural home" width={900} height={1100} />
               </figure>
               <div className="aud__body">
                 <p className="aud__tag aud__tag--green">

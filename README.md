@@ -139,22 +139,27 @@ font. They collapse to natural wrapping below 820px.
 `public/assets/img/` is generated from `design/exports/` and `design/logos/` —
 trimmed of transparent rounded margins and flattened onto white.
 
-| Source | Served as |
-| --- | --- |
-| `Complete Landing Girl Image.png` | `hero-merchant.jpg` |
-| `Opening An Account.png` | `challenge-branch.jpg` |
-| `Reduce Dormancy.png` | `audience-banks.jpg` |
-| `Build Trust.png` | `audience-fintechs.jpg` |
-| `Turn Evidence.png` | `audience-regulators.jpg` |
-| `Design Infra.png` | `audience-dfis.jpg` |
-| `why digital account opening.png` | `insight-featured.jpg` |
+| Source | Served as | Used by |
+| --- | --- | --- |
+| `Complete Landing Girl Image.png` | `hero-merchant.jpg` | Hero |
+| `Opening An Account.png` | `challenge-branch.jpg` | The Challenge |
+| `Commercial Bank & MFI.jpg` | `commercial-banks-mfis.jpg` | Who We Work With |
+| `Fintechs & Payment Providers.jpg` | `fintechs-payment-providers.jpg` | Who We Work With |
+| `Regulators.jpg` | `regulators.jpg` | Who We Work With |
+| `Development Finance Institutions.jpg` | `development-finance-institutions.jpg` | Who We Work With |
+| `why digital account opening.png` | `insight-featured.jpg` | Insights featured card |
+
+Served files are named for the section they appear in, in URL-safe form — no
+spaces or ampersands, which would have to be percent-encoded in every `src`.
 
 `why digital account opening.png` has the card's headline and body baked in, so
 only the clean photo band above them is used and the text renders live. It is a
 short strip stretched to fill the card; a taller clean export would sharpen it.
 
-Exports are roughly 1× for their rendered size, so they are slightly soft on a
-retina screen. Re-export at 2× under the same filenames whenever convenient.
+The four Who We Work With photographs are full-resolution (900px wide for a
+~240px slot, so crisp at 2×). The hero, Challenge and Insights images are still
+roughly 1× and will look slightly soft on a retina screen — re-export those at 2×
+under the same filenames whenever convenient.
 
 `design/logos/` holds the full identity pack. Three variants are the sources for
 the served logos and favicon; the other five are unused by the site but kept as
