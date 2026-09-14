@@ -7,10 +7,10 @@ import { useEffect, useState } from "react";
 type NavLink = { href: string; label: string };
 
 const LINKS: NavLink[] = [
+  { href: "/about", label: "About" },
   { href: "/#expertise", label: "Expertise" },
   { href: "/#audiences", label: "Who We Help" },
   { href: "/insights", label: "Insights" },
-  { href: "/about", label: "About" },
 ];
 
 export default function SiteHeader() {

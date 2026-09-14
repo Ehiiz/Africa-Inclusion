@@ -165,7 +165,7 @@ export default function CoreValues() {
             aria-selected={index === active}
             aria-controls={`value-panel-${item.key}`}
             tabIndex={index === active ? 0 : -1}
-            className={`values__tab${index === active ? " is-active" : ""}`}
+            className={`values__tab values__tab--${item.tone}${index === active ? " is-active" : ""}`}
             onClick={() => setActive(index)}
           >
             {item.name}

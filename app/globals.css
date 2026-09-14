@@ -1661,10 +1661,14 @@ a.footer__contact-value:hover { color: var(--green); }
 }
 .about-history__media img { width: 100%; height: auto; }
 
-/* The hero's stat card floats over a photograph; here it sits under one. */
+/* The hero's stat card floats over a photograph; here it laps the bottom of one.
+   It must be positioned: an in-flow block paints its background before the
+   figure's <img> paints its inline content, so a static card slides underneath
+   the photograph however much it is pulled up. */
 .stat-card--inline {
-  position: static;
-  margin-top: -34px;
+  position: relative;
+  z-index: 1;
+  margin-top: -46px;
   margin-left: 22px;
   width: fit-content;
 }
@@ -1718,8 +1722,18 @@ a.footer__contact-value:hover { color: var(--green); }
   text-transform: uppercase; color: var(--body-fg);
   transition: border-color .2s var(--ease), color .2s var(--ease), background-color .2s var(--ease);
 }
-.values__tab:hover { border-color: var(--ink); color: var(--ink); }
-.values__tab.is-active { background: var(--ink); border-color: var(--ink); color: #fff; }
+/* Each tab carries its own value's accent, so the colour a reader sees on the
+   tab is the colour of the panel it opens. */
+.values__tab--green { --value-tone: var(--green); }
+.values__tab--amber { --value-tone: var(--amber); }
+.values__tab--red   { --value-tone: var(--red-soft); }
+
+.values__tab:hover { border-color: var(--value-tone); color: var(--value-tone); }
+.values__tab.is-active {
+  background: var(--value-tone);
+  border-color: var(--value-tone);
+  color: #fff;
+}
 
 /* Fills across the active tab over one interval, so the next slide is never a
    surprise. Paused with the rotation, and absent entirely under reduced motion. */
@@ -1731,7 +1745,7 @@ a.footer__contact-value:hover { color: var(--green); }
   width: 100%;
   transform: scaleX(0);
   transform-origin: left;
-  background: var(--green);
+  background: rgba(255,255,255,.72);
 }
 .values__tab-rail[data-running="true"] { animation: values-rail linear forwards; }
 @keyframes values-rail { from { transform: scaleX(0); } to { transform: scaleX(1); } }
@@ -1782,18 +1796,20 @@ a.footer__contact-value:hover { color: var(--green); }
 }
 .values__points li {
   position: relative;
-  padding-left: 26px;
+  padding-left: 20px;
   font-size: 15.5px;
   line-height: 1.62;
   color: var(--body-fg);
 }
+/* A dot on the text's own first line, so wrapped lines align under the first. */
 .values__points li::before {
   content: "";
   position: absolute;
-  left: 0;
-  top: .58em;
-  width: 13px;
-  height: 2px;
+  left: 1px;
+  top: .56em;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
   background: var(--green);
 }
 .values__panel--amber .values__points li::before { background: var(--amber); }

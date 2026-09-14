@@ -115,8 +115,9 @@ export default function AboutPage() {
                 </span>
                 <h3>Vision</h3>
                 <p>
-                  An Africa where digital finance is <strong>trusted</strong>,{" "}
-                  <strong>active</strong>, and <strong>inclusive</strong> for everyone.
+                  To build an empowered Africa where digital finance is{" "}
+                  <strong>trusted</strong>, <strong>active</strong>, and{" "}
+                  <strong>inclusive</strong> for everyone.
                 </p>
               </article>
 
@@ -129,8 +130,8 @@ export default function AboutPage() {
                 </span>
                 <h3>Mission</h3>
                 <p>
-                  To help institutions eliminate friction, build trust, and turn digital access
-                  into active everyday usage.
+                  To help institutions eliminate friction, build trust and turn digital
+                  financial access into active everyday usage.
                 </p>
               </article>
             </div>

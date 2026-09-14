@@ -61,7 +61,7 @@ export default function Audiences() {
               <div className="aud__body">
                 <p className="aud__tag aud__tag--green">
                   <span className="ico-chip ico-chip--tint-green"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.2"/><path d="M2.8 12h18.4"/><path d="M12 2.8c2.4 2.6 3.6 5.7 3.6 9.2s-1.2 6.6-3.6 9.2c-2.4-2.6-3.6-5.7-3.6-9.2S9.6 5.4 12 2.8Z"/></svg></span>
-                  Development Finance Institutions
+                  Development Finance Institutions and NGOs
                 </p>
                 <h3>Design infrastructure that delivers impact.</h3>
                 <a className="link link--green" {...BOOKING_LINK_PROPS}><span className="ico-arrow" aria-hidden="true">&#8594;</span> Create Greater Impact</a>
