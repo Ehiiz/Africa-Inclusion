@@ -2,6 +2,7 @@ import "server-only";
 import { db, ready } from "./db";
 import type { Post, PostInput } from "./posts-shared";
 import { slugify } from "./posts-shared";
+import { deleteEngagementFor } from "./engagement";
 
 // The pure half of the module is re-exported so `@/lib/posts` stays the
 // single import site for server code.
@@ -59,6 +60,19 @@ export async function getBySlug(slug: string): Promise<Post | null> {
     args: [slug],
   });
   return res.rows.length ? toPost(res.rows[0]) : null;
+}
+
+/**
+ * Cheap existence check for the engagement actions — a like or a comment should
+ * not be able to name an arbitrary id, and neither needs the post's columns.
+ */
+export async function isPublished(id: number): Promise<boolean> {
+  await ready();
+  const res = await db.execute({
+    sql: "SELECT 1 FROM posts WHERE id = ? AND published = 1 LIMIT 1",
+    args: [id],
+  });
+  return res.rows.length > 0;
 }
 
 export async function getById(id: number): Promise<Post | null> {
@@ -181,6 +195,7 @@ export async function updatePost(id: number, input: PostInput): Promise<Post | n
 export async function deletePost(id: number): Promise<void> {
   await ready();
   await db.execute({ sql: "DELETE FROM posts WHERE id = ?", args: [id] });
+  await deleteEngagementFor(id);
 }
 
 /**

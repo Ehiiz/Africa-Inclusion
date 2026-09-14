@@ -4,6 +4,7 @@ import SiteHeader from "@/components/site/SiteHeader";
 import SiteFooter from "@/components/site/SiteFooter";
 import Reveal from "@/components/site/Reveal";
 import { formatMonth, imageUrl, listPublished } from "@/lib/posts";
+import { engagementFor, plural, type Engagement } from "@/lib/engagement";
 
 export const dynamic = "force-dynamic";
 
@@ -16,6 +17,7 @@ export const metadata: Metadata = {
 
 export default async function InsightsIndexPage() {
   const posts = await listPublished();
+  const counts = await engagementFor(posts.map((post) => post.id));
 
   return (
     <>
@@ -70,6 +72,7 @@ export default async function InsightsIndexPage() {
                         )}
                         <span className="post-index__meta">
                           {formatMonth(post.publishedAt)} &middot; {post.readMinutes} min read
+                          <EngagementMeta engagement={counts.get(post.id)} />
                         </span>
                       </span>
                     </Link>
@@ -83,6 +86,18 @@ export default async function InsightsIndexPage() {
 
       <SiteFooter />
       <Reveal />
+    </>
+  );
+}
+
+/** "· 12 likes · 3 comments", once a post has either. */
+function EngagementMeta({ engagement }: { engagement?: Engagement }) {
+  if (!engagement || (engagement.likes === 0 && engagement.comments === 0)) return null;
+  return (
+    <>
+      {" "}
+      &middot; {plural(engagement.likes, "like")} &middot;{" "}
+      {plural(engagement.comments, "comment")}
     </>
   );
 }

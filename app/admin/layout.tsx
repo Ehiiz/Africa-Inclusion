@@ -29,6 +29,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
             <nav className="admin__nav">
               <Link href="/admin">Posts</Link>
               <Link href="/admin/posts/new">New post</Link>
+              <Link href="/admin/comments">Comments</Link>
               <Link href="/" target="_blank" rel="noopener noreferrer">
                 View site
               </Link>

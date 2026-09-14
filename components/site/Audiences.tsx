@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { BOOKING_LINK_PROPS } from "@/lib/site";
 
 export default function Audiences() {
   return (
@@ -21,7 +22,7 @@ export default function Audiences() {
                   Commercial Banks &amp; MFIs
                 </p>
                 <h3>Reduce dormancy. Increase digital adoption. Mobilize deposits.</h3>
-                <a className="link link--green" href="#contact"><span className="ico-arrow" aria-hidden="true">&#8594;</span> Improve Digital Adoption</a>
+                <a className="link link--green" {...BOOKING_LINK_PROPS}><span className="ico-arrow" aria-hidden="true">&#8594;</span> Improve Digital Adoption</a>
               </div>
             </article>
 
@@ -35,7 +36,7 @@ export default function Audiences() {
                   Fintechs &amp; Payment Providers
                 </p>
                 <h3>Build trust. Reduce churn. Reach further.</h3>
-                <a className="link link--amber" href="#contact"><span className="ico-arrow" aria-hidden="true">&#8594;</span> Strengthen Your Platform</a>
+                <a className="link link--amber" {...BOOKING_LINK_PROPS}><span className="ico-arrow" aria-hidden="true">&#8594;</span> Strengthen Your Platform</a>
               </div>
             </article>
 
@@ -49,7 +50,7 @@ export default function Audiences() {
                   Regulators
                 </p>
                 <h3>Turn evidence into better financial systems.</h3>
-                <a className="link link--red" href="#contact"><span className="ico-arrow" aria-hidden="true">&#8594;</span> Develop Better Policy</a>
+                <a className="link link--red" {...BOOKING_LINK_PROPS}><span className="ico-arrow" aria-hidden="true">&#8594;</span> Develop Better Policy</a>
               </div>
             </article>
 
@@ -63,7 +64,7 @@ export default function Audiences() {
                   Development Finance Institutions
                 </p>
                 <h3>Design infrastructure that delivers impact.</h3>
-                <a className="link link--green" href="#contact"><span className="ico-arrow" aria-hidden="true">&#8594;</span> Create Greater Impact</a>
+                <a className="link link--green" {...BOOKING_LINK_PROPS}><span className="ico-arrow" aria-hidden="true">&#8594;</span> Create Greater Impact</a>
               </div>
             </article>
           </div>

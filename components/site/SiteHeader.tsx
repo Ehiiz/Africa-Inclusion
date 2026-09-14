@@ -10,7 +10,7 @@ const LINKS: NavLink[] = [
   { href: "/#expertise", label: "Expertise" },
   { href: "/#audiences", label: "Who We Help" },
   { href: "/insights", label: "Insights" },
-  { href: "/#about", label: "About" },
+  { href: "/about", label: "About" },
 ];
 
 export default function SiteHeader() {

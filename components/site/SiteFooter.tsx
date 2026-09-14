@@ -79,7 +79,7 @@ export default function SiteFooter() {
           <nav className="footer__col" aria-label="Company">
             <h2>Company</h2>
             <ul>
-              <li><Link href="/#about">About</Link></li>
+              <li><Link href="/about">About</Link></li>
               <li><Link href="/insights">Insights</Link></li>
               <li><Link href="/#contact">Contact</Link></li>
             </ul>

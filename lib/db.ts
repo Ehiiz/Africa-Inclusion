@@ -52,6 +52,25 @@ CREATE TABLE IF NOT EXISTS posts (
   updated_at   TEXT    NOT NULL DEFAULT (datetime('now'))
 );
 CREATE INDEX IF NOT EXISTS posts_published_idx ON posts (published, published_at DESC);
+
+CREATE TABLE IF NOT EXISTS comments (
+  id         INTEGER PRIMARY KEY AUTOINCREMENT,
+  post_id    INTEGER NOT NULL,
+  author     TEXT    NOT NULL,
+  email      TEXT    NOT NULL,
+  body       TEXT    NOT NULL,
+  hidden     INTEGER NOT NULL DEFAULT 0,
+  visitor_id TEXT    NOT NULL DEFAULT '',
+  created_at TEXT    NOT NULL DEFAULT (datetime('now'))
+);
+CREATE INDEX IF NOT EXISTS comments_post_idx ON comments (post_id, hidden, created_at);
+
+CREATE TABLE IF NOT EXISTS post_likes (
+  post_id    INTEGER NOT NULL,
+  visitor_id TEXT    NOT NULL,
+  created_at TEXT    NOT NULL DEFAULT (datetime('now')),
+  PRIMARY KEY (post_id, visitor_id)
+);
 `;
 
 /**

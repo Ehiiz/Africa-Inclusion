@@ -13,6 +13,7 @@ import {
   updatePost,
   type PostInput,
 } from "@/lib/posts";
+import { deleteComment, setCommentHidden } from "@/lib/engagement";
 import { firstParagraph } from "@/lib/markdown";
 
 export type FormState = { error?: string } | undefined;
@@ -129,4 +130,34 @@ export async function deletePostAction(formData: FormData): Promise<void> {
     revalidatePath("/insights");
   }
   redirect("/admin?deleted=1");
+}
+
+/* -------------------------------------------------------------- comments -- */
+
+/**
+ * Comments post straight to the page, so moderation is after the fact: hide one
+ * to take it down without losing it, delete to be rid of it.
+ */
+export async function setCommentHiddenAction(formData: FormData): Promise<void> {
+  const id = Number(formData.get("id"));
+  const hidden = formData.get("hidden") === "1";
+  if (Number.isFinite(id)) {
+    await setCommentHidden(id, hidden);
+    revalidateAfterComment(String(formData.get("slug") ?? ""));
+  }
+  redirect("/admin/comments");
+}
+
+export async function deleteCommentAction(formData: FormData): Promise<void> {
+  const id = Number(formData.get("id"));
+  if (Number.isFinite(id)) {
+    await deleteComment(id);
+    revalidateAfterComment(String(formData.get("slug") ?? ""));
+  }
+  redirect("/admin/comments?deleted=1");
+}
+
+function revalidateAfterComment(slug: string): void {
+  if (slug) revalidatePath(`/insights/${slug}`);
+  revalidatePath("/insights");
 }

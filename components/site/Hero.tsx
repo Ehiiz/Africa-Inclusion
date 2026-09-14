@@ -38,14 +38,14 @@ export default function Hero() {
               <span className="ico-chip ico-chip--pillar ico-chip--pillar-green">
                 <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M11 18.5h2"/></svg>
               </span>
-              <span className="hero__pillar-label">Digital Finance</span>
+              <span className="hero__pillar-label">Digital Financial Services</span>
               <p>Designing channels people actually use.</p>
             </li>
             <li>
               <span className="ico-chip ico-chip--pillar ico-chip--pillar-gold">
                 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8 20 6v6c0 4.6-3.2 7.7-8 9.2C7.2 19.7 4 16.6 4 12V6z"/><path d="m9.2 12.2 2 2 3.6-4"/></svg>
               </span>
-              <span className="hero__pillar-label">Institutional Trust</span>
+              <span className="hero__pillar-label">Institutional Trust &amp; Consumer Protection</span>
               <p>Building confidence into every interaction.</p>
             </li>
             <li>

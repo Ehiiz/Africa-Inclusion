@@ -25,9 +25,11 @@ and quietly seed the local SQLite file instead of your remote one.
 | Path | |
 | --- | --- |
 | `/` | Landing page. The Insights section reads published posts from the database. |
+| `/about` | History, vision, mission and the five core values. Static. |
 | `/insights` | All published posts, newest first. |
 | `/insights/[slug]` | A single post; Markdown body rendered to HTML. |
 | `/admin` | Post list — title, category, status, publish date. Requires sign-in. |
+| `/admin/comments` | Every comment, with the commenter's email. Hide or delete. |
 | `/admin/posts/new` | Write a post. |
 | `/admin/posts/[id]` | Edit, publish/unpublish, feature or delete a post. |
 | `/admin/login` | Password sign-in. |
@@ -40,14 +42,21 @@ app/
   globals.css          the whole design system + blog + admin styles
   page.tsx             landing page composition
   fonts/               the 7 Helvetica Now Display faces the site uses
-  insights/            public blog
+  about/               the About page
+  insights/            public blog + the comment and like server actions
   admin/               admin area + server actions
 components/
   site/                one component per landing-page section
+  about/               CoreValues — the self-advancing core-values slider
+  insights/            comment thread, comment form, like button, share bar
   admin/               LoginForm, PostForm
 lib/
+  site.ts              the booking URL, shared by every consultation CTA
   db.ts                libSQL client + schema
   posts.ts             queries, slugify, read-time estimate, date formatting
+  engagement.ts        comment and like queries
+  engagement-shared.ts comment validation + formatting, safe to import client-side
+  visitor.ts           the anonymous visitor cookie, and the commenter prefill
   auth.ts              password check + session cookie (server only)
   auth-shared.ts       HMAC session token — also runs in Edge middleware
   markdown.ts          Markdown → HTML, with raw HTML disabled
@@ -111,6 +120,81 @@ snippet cannot inject script tags even though only the admin can write.
   it on one post clears it everywhere else.
 - **Published** is the only thing that makes a post public. Drafts are invisible
   outside `/admin`.
+
+## About page
+
+`/about` is built from `ABOUT SECTION1.pdf` — history, vision, mission and the
+five core values. It is static: nothing on it reads the database, so Next
+prerenders it at build time.
+
+The core values are a self-advancing slider (`components/about/CoreValues.tsx`),
+as the brief asked. It is a real tab list — arrow keys move between values, each
+panel is a labelled `tabpanel` — and the rotation is restrained rather than
+insistent:
+
+- it pauses while a reader hovers the block or tabs into it;
+- it does not start at all under `prefers-reduced-motion: reduce`;
+- a rail fills across the active tab over the 7-second interval, so the next
+  slide is visible coming rather than a surprise.
+
+Change `INTERVAL_MS` in that file to retime it.
+
+The nav and footer **About** links point here. The landing page's `id="about"`
+section (The Challenge) is untouched and still anchorable at `/#about`.
+
+## Booking a consultation
+
+`BOOKING_URL` in `lib/site.ts` is the Zoho slot-booking page. It backs the
+closing CTA's "Book a Consultation" button and all four Who We Work With cards,
+so those five links cannot drift apart. Spread `BOOKING_LINK_PROPS` onto an
+anchor to get the href plus the `target`/`rel` an outbound link needs.
+
+"Send an Inquiry" and the footer address stay on `mailto:` — an inquiry is not a
+booking.
+
+## Comments, likes and sharing
+
+Every published insight carries a comment thread, a like button and a share row.
+None of it asks the reader to make an account.
+
+**Comments** take a name, an email and the comment. The email is stored for the
+admin's benefit and is **never rendered on the public page** — `listComments()`
+does not select the column, so the bytes never reach the browser. Bodies are
+plain text that React escapes; unlike post bodies they are not Markdown, so a
+commenter cannot inject links or formatting.
+
+Comments go live immediately. Three things keep that honest:
+
+- a honeypot field that people never see. A bot that fills it gets a success
+  message and a comment flagged `hidden`, which is the quietest way to fail;
+- a 30-second cooldown per browser (`COMMENT_COOLDOWN_SECONDS`);
+- length and format limits in `validateComment()`.
+
+Moderation is therefore after the fact, at `/admin/comments` — **hide** takes a
+comment off the site but keeps it, **delete** is final.
+
+**Likes** are anonymous and toggle. A reader is identified only by `afri_visitor`,
+an opaque random id in an httpOnly cookie that holds no personal data; clearing
+cookies simply looks like a new reader. One row per (post, visitor) in
+`post_likes` means the count is exact and a like can be taken back. The button
+updates optimistically and settles on whatever the server returns.
+
+`afri_commenter` remembers the last name and email used from that browser so a
+returning reader does not retype them. It is httpOnly and read on the server, so
+the values are filled in by the page rather than by script.
+
+**Share** uses the native share sheet where the browser has one, and otherwise
+falls back to LinkedIn, X, Facebook, WhatsApp, email and copy-link. The absolute
+URL comes from `NEXT_PUBLIC_SITE_URL`, and is re-resolved against the address bar
+on the client so sharing still works if that variable is unset.
+
+Counts appear under each card on `/insights` once a post has any, and beside the
+read time on the post itself.
+
+Deleting a post deletes its comments and likes (`deleteEngagementFor`). That
+cascade is done in code rather than declared as a foreign key, because SQLite
+only enforces those when `PRAGMA foreign_keys` is on — which it is not, by
+default.
 
 ## Brand
 
@@ -189,4 +273,3 @@ BLOB column for a URL.
 
 - **Social links** — `components/site/SiteFooter.tsx`. Facebook and LinkedIn are in
   place with the right icons and labels but `href="#"`.
-- **Contact** — the CTA buttons open `mailto:` links to `info@afriinclusion.com`.

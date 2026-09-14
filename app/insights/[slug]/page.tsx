@@ -5,6 +5,11 @@ import SiteHeader from "@/components/site/SiteHeader";
 import SiteFooter from "@/components/site/SiteFooter";
 import { formatLongDate, getBySlug, imageUrl, listPublished } from "@/lib/posts";
 import { firstParagraph, renderMarkdown } from "@/lib/markdown";
+import { engagementOf, hasLiked, listComments, plural } from "@/lib/engagement";
+import { readCommenter, readVisitorId } from "@/lib/visitor";
+import Comments from "@/components/insights/Comments";
+import LikeButton from "@/components/insights/LikeButton";
+import ShareBar from "@/components/insights/ShareBar";
 
 export const dynamic = "force-dynamic";
 
@@ -26,7 +31,16 @@ export default async function InsightPage({ params }: Params) {
   const post = await getBySlug(slug);
   if (!post || !post.published) notFound();
 
-  const others = (await listPublished(4)).filter((p) => p.id !== post.id).slice(0, 3);
+  const visitorId = await readVisitorId();
+  const [others, comments, counts, liked, commenter] = await Promise.all([
+    listPublished(4).then((list) => list.filter((p) => p.id !== post.id).slice(0, 3)),
+    listComments(post.id),
+    engagementOf(post.id),
+    hasLiked(post.id, visitorId),
+    readCommenter(),
+  ]);
+
+  const shareUrl = `${process.env.NEXT_PUBLIC_SITE_URL ?? ""}/insights/${post.slug}`;
 
   // An excerpt left blank is derived from the opening paragraph. Showing it as a
   // standfirst above that same paragraph would just repeat it.
@@ -49,7 +63,10 @@ export default async function InsightPage({ params }: Params) {
               {post.category && <p className="eyebrow eyebrow--on-green">{post.category}</p>}
               <h1>{post.title}</h1>
               <p className="page-head__meta">
-                {formatLongDate(post.publishedAt)} &middot; {post.readMinutes} min read
+                {formatLongDate(post.publishedAt)} &middot; {post.readMinutes} min read &middot;{" "}
+                <a className="page-head__jump" href="#comments">
+                  {plural(comments.length, "comment")}
+                </a>
               </p>
             </div>
           </header>
@@ -72,9 +89,22 @@ export default async function InsightPage({ params }: Params) {
                 className="prose"
                 dangerouslySetInnerHTML={{ __html: renderMarkdown(post.body) }}
               />
+
+              <div className="article-actions">
+                <LikeButton postId={post.id} likes={counts.likes} liked={liked} />
+                <ShareBar url={shareUrl} title={post.title} />
+              </div>
             </div>
           </div>
         </article>
+
+        <Comments
+          postId={post.id}
+          slug={post.slug}
+          comments={comments}
+          author={commenter.author}
+          email={commenter.email}
+        />
 
         {others.length > 0 && (
           <section className="section section--mist">
