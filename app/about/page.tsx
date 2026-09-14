@@ -34,7 +34,7 @@ export default function AboutPage() {
         </section>
 
         {/* ------------------------------------------------------- history -- */}
-        <section className="section">
+        <section className="section section--mist">
           <div className="shell">
             <header className="section-head reveal">
               <p className="eyebrow eyebrow--green">Our History</p>
@@ -95,65 +95,58 @@ export default function AboutPage() {
         </section>
 
         {/* ---------------------------------------------------- philosophy -- */}
-        <section className="section section--green">
+        <section className="section">
           <div className="shell">
-            <header className="section-head section-head--on-green reveal">
-              <p className="eyebrow eyebrow--on-green">Corporate Philosophy</p>
+            <header className="section-head reveal">
+              <p className="eyebrow eyebrow--green">Corporate Philosophy</p>
               <h2>
                 Where we are going, <br />
                 and how we get there.
               </h2>
             </header>
 
-            <div className="philosophy reveal">
-              <article className="philosophy__card">
-                <span className="ico-chip ico-chip--outline-light">
-                  <svg viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M1.9 12S5.8 5.4 12 5.4 22.1 12 22.1 12 18.2 18.6 12 18.6 1.9 12 1.9 12Z" />
-                    <circle cx="12" cy="12" r="3.1" />
-                  </svg>
-                </span>
-                <h3>Vision</h3>
-                <p>
-                  To build an empowered Africa where digital finance is{" "}
-                  <strong>trusted</strong>, <strong>active</strong>, and{" "}
-                  <strong>inclusive</strong> for everyone.
-                </p>
+            {/* The same solid brand-colour cards as Why Afri Inclusion. */}
+            <div className="pillars pillars--two reveal">
+              <article className="pillar pillar--green pillar--statement">
+                <div className="pillar__top">
+                  <span className="pillar__num">01</span>
+                  <span className="ico-chip ico-chip--solid">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M1.9 12S5.8 5.4 12 5.4 22.1 12 22.1 12 18.2 18.6 12 18.6 1.9 12 1.9 12Z" />
+                      <circle cx="12" cy="12" r="3.1" />
+                    </svg>
+                  </span>
+                </div>
+                <p className="pillar__kicker">Vision</p>
+                <h3>
+                  To build an empowered Africa where digital finance is trusted, active, and
+                  inclusive for everyone.
+                </h3>
               </article>
 
-              <article className="philosophy__card">
-                <span className="ico-chip ico-chip--outline-light">
-                  <svg viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M12 21c0-5 3-6.5 3-10a3 3 0 0 0-6 0c0 3.5 3 5 3 10Z" />
-                    <path d="M4.5 6.5 8 8M19.5 6.5 16 8M5 14l3-.6M19 14l-3-.6" />
-                  </svg>
-                </span>
-                <h3>Mission</h3>
-                <p>
+              <article className="pillar pillar--yellow pillar--statement">
+                <div className="pillar__top">
+                  <span className="pillar__num">02</span>
+                  <span className="ico-chip ico-chip--solid">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M12 21c0-5 3-6.5 3-10a3 3 0 0 0-6 0c0 3.5 3 5 3 10Z" />
+                      <path d="M4.5 6.5 8 8M19.5 6.5 16 8M5 14l3-.6M19 14l-3-.6" />
+                    </svg>
+                  </span>
+                </div>
+                <p className="pillar__kicker">Mission</p>
+                <h3>
                   To help institutions eliminate friction, build trust and turn digital
                   financial access into active everyday usage.
-                </p>
+                </h3>
               </article>
             </div>
           </div>
         </section>
 
         {/* --------------------------------------------------- core values -- */}
-        <section className="section section--mist">
-          <div className="shell">
-            <header className="section-head reveal">
-              <p className="eyebrow eyebrow--red">Core Values</p>
-              <h2>
-                Five commitments that shape <br />
-                every engagement.
-              </h2>
-            </header>
-
-            <div className="reveal">
-              <CoreValues />
-            </div>
-          </div>
-        </section>
+        {/* Owns its own section: the ground is what changes per value. */}
+        <CoreValues />
 
         <ClosingCta />
       </main>

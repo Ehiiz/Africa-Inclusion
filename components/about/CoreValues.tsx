@@ -6,13 +6,13 @@ type Value = {
   key: string;
   name: string;
   line: string;
-  /** Which of the three brand accents this value carries. */
-  tone: "green" | "amber" | "red";
+  /** Which brand ground this value takes over the section with. */
+  tone: "green" | "yellow" | "red";
   icon: ReactElement;
   points: string[];
 };
 
-/** How long each value holds before the next one slides in. */
+/** How long each value holds the section before the next one takes over. */
 const INTERVAL_MS = 7000;
 
 const VALUES: Value[] = [
@@ -38,7 +38,7 @@ const VALUES: Value[] = [
     key: "rigor",
     name: "Rigor",
     line: "Advice grounded in empirical research and tested against operational reality.",
-    tone: "amber",
+    tone: "yellow",
     icon: (
       <svg viewBox="0 0 24 24" aria-hidden="true">
         <circle cx="10.6" cy="10.6" r="6.4" />
@@ -94,7 +94,7 @@ const VALUES: Value[] = [
     key: "impact",
     name: "Impact",
     line: "Success measured in sustained usage, not in accounts opened.",
-    tone: "amber",
+    tone: "yellow",
     icon: (
       <svg viewBox="0 0 24 24" aria-hidden="true">
         <circle cx="12" cy="12" r="8.4" />
@@ -112,15 +112,19 @@ const VALUES: Value[] = [
 ];
 
 /**
- * The five core values, advancing on their own. Rotation stops while a reader
- * hovers or tabs into the block, and never starts at all when the system asks
- * for reduced motion — an animation nobody can pause is the thing to avoid here.
+ * The five core values, each taking over the whole section in its own brand
+ * colour before handing on to the next.
+ *
+ * The component owns its `<section>` rather than sitting inside one, because the
+ * thing that changes is the ground itself. Rotation stops while a reader hovers
+ * or tabs in, and never starts under reduced motion — an animation nobody can
+ * pause is the thing to avoid here.
  */
 export default function CoreValues() {
   const [active, setActive] = useState(0);
   const [held, setHeld] = useState(false);
   const [animate, setAnimate] = useState(false);
-  const tabsRef = useRef<HTMLDivElement>(null);
+  const dotsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setAnimate(!window.matchMedia("(prefers-reduced-motion: reduce)").matches);
@@ -132,87 +136,101 @@ export default function CoreValues() {
     return () => clearTimeout(timer);
   }, [active, animate, held]);
 
-  // Arrow keys move between values, as they do in any tab list.
   const onKeyDown = useCallback((event: React.KeyboardEvent) => {
     const step = event.key === "ArrowRight" ? 1 : event.key === "ArrowLeft" ? -1 : 0;
     if (!step) return;
     event.preventDefault();
     setActive((i) => {
       const next = (i + step + VALUES.length) % VALUES.length;
-      const buttons = tabsRef.current?.querySelectorAll<HTMLButtonElement>("button");
-      buttons?.[next]?.focus();
+      dotsRef.current?.querySelectorAll<HTMLButtonElement>("button")[next]?.focus();
       return next;
     });
   }, []);
 
   const value = VALUES[active]!;
+  const running = animate && !held;
 
   return (
-    <div
-      className="values"
-      onMouseEnter={() => setHeld(true)}
-      onMouseLeave={() => setHeld(false)}
-      onFocusCapture={() => setHeld(true)}
-      onBlurCapture={() => setHeld(false)}
-    >
-      <div className="values__tabs" role="tablist" aria-label="Core values" ref={tabsRef} onKeyDown={onKeyDown}>
-        {VALUES.map((item, index) => (
-          <button
-            key={item.key}
-            type="button"
-            role="tab"
-            id={`value-tab-${item.key}`}
-            aria-selected={index === active}
-            aria-controls={`value-panel-${item.key}`}
-            tabIndex={index === active ? 0 : -1}
-            className={`values__tab values__tab--${item.tone}${index === active ? " is-active" : ""}`}
-            onClick={() => setActive(index)}
-          >
-            {item.name}
-            <span
-              className="values__tab-rail"
-              aria-hidden="true"
-              // The rail fills over one interval, so the reader can see the
-              // rotation coming rather than being surprised by it.
-              style={
-                index === active && animate && !held
-                  ? { animationDuration: `${INTERVAL_MS}ms` }
-                  : undefined
-              }
-              data-running={index === active && animate && !held ? "true" : "false"}
-            />
-          </button>
-        ))}
-      </div>
+    <section className={`section values-section values-section--${value.tone}`}>
+      <div className="shell">
+        <header className="section-head reveal">
+          <p className="eyebrow">Core Values</p>
+          <h2>
+            Five commitments that shape <br />
+            every engagement.
+          </h2>
+        </header>
 
-      <div
-        key={value.key}
-        className={`values__panel values__panel--${value.tone}`}
-        role="tabpanel"
-        id={`value-panel-${value.key}`}
-        aria-labelledby={`value-tab-${value.key}`}
-        tabIndex={0}
-      >
-        <div className="values__head">
-          <span className={`ico-chip ico-chip--tint-${value.tone}`}>
-            {value.icon}
-          </span>
-          <div>
+        <div
+          className="values reveal"
+          onMouseEnter={() => setHeld(true)}
+          onMouseLeave={() => setHeld(false)}
+          onFocusCapture={() => setHeld(true)}
+          onBlurCapture={() => setHeld(false)}
+        >
+          <div className="values__bar">
+            <p className="values__count" aria-hidden="true">
+              {String(active + 1).padStart(2, "0")}
+              <span>/{String(VALUES.length).padStart(2, "0")}</span>
+            </p>
+            <span className="values__icon" aria-hidden="true">
+              {value.icon}
+            </span>
+          </div>
+
+          <div
+            key={value.key}
+            className="values__slide"
+            role="tabpanel"
+            id={`value-panel-${value.key}`}
+            aria-labelledby={`value-dot-${value.key}`}
+            tabIndex={0}
+          >
             <h3 className="values__name">{value.name}</h3>
             <p className="values__line">{value.line}</p>
-          </div>
-          <p className="values__count" aria-hidden="true">
-            {String(active + 1).padStart(2, "0")}
-            <span>/{String(VALUES.length).padStart(2, "0")}</span>
-          </p>
-        </div>
 
-        <ul className="values__points">
-          {value.points.map((point) => (
-            <li key={point}>{point}</li>
-          ))}
-        </ul>
+            <ul className="values__points">
+              {value.points.map((point) => (
+                <li key={point}>{point}</li>
+              ))}
+            </ul>
+          </div>
+
+          <div
+            className="values__dots"
+            role="tablist"
+            aria-label="Core values"
+            ref={dotsRef}
+            onKeyDown={onKeyDown}
+          >
+            {VALUES.map((item, index) => (
+              <button
+                key={item.key}
+                type="button"
+                role="tab"
+                id={`value-dot-${item.key}`}
+                aria-selected={index === active}
+                aria-controls={`value-panel-${item.key}`}
+                tabIndex={index === active ? 0 : -1}
+                className={`values__dot${index === active ? " is-active" : ""}`}
+                onClick={() => setActive(index)}
+              >
+                <span className="sr-only">{item.name}</span>
+                <span
+                  className="values__dot-fill"
+                  aria-hidden="true"
+                  data-running={index === active && running ? "true" : "false"}
+                  style={
+                    index === active && running
+                      ? { animationDuration: `${INTERVAL_MS}ms` }
+                      : undefined
+                  }
+                />
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
-    </div>
+    </section>
   );
 }

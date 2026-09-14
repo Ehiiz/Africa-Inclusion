@@ -4,7 +4,7 @@ export default function WhyAfri() {
       <section className="section">
         <div className="shell">
           <header className="section-head reveal">
-            <p className="eyebrow eyebrow--green">Why Afri</p>
+            <p className="eyebrow eyebrow--green">Why Afri Inclusion</p>
             <h2>Designing finance around the <br />people it is meant to serve.</h2>
             <p className="section-head__lede">
               Afri Inclusion Advisory was established to address a persistent challenge: high account-opening

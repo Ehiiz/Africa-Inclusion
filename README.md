@@ -127,14 +127,25 @@ snippet cannot inject script tags even though only the admin can write.
 five core values. It is static: nothing on it reads the database, so Next
 prerenders it at build time.
 
+Vision and Mission reuse the solid brand-colour cards from Why Afri Inclusion
+(`.pillar`, with a `.pillars--two` grid and a `.pillar--statement` heading size),
+so the two sections read as one system.
+
 The core values are a self-advancing slider (`components/about/CoreValues.tsx`),
-as the brief asked. It is a real tab list — arrow keys move between values, each
+as the brief asked. Each value takes over the **whole section** in its own brand
+ground — green, yellow, red, green, yellow — and the colour crossfades on the
+handover. The component owns its own `<section>` rather than sitting inside one,
+because the ground is the thing that changes; text colour comes from
+`--on-tone*` custom properties set per ground, so the yellow slide flips to ink
+type automatically.
+
+It stays a real tab list — the dots are tabs, arrow keys move between values, the
 panel is a labelled `tabpanel` — and the rotation is restrained rather than
 insistent:
 
 - it pauses while a reader hovers the block or tabs into it;
 - it does not start at all under `prefers-reduced-motion: reduce`;
-- a rail fills across the active tab over the 7-second interval, so the next
+- the active dot is a pill that fills over the 7-second interval, so the next
   slide is visible coming rather than a surprise.
 
 Change `INTERVAL_MS` in that file to retime it.

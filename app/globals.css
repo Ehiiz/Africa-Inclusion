@@ -451,6 +451,16 @@ h3 {
   transition: transform .28s var(--ease), box-shadow .28s var(--ease);
 }
 .pillar:hover { transform: translateY(-5px); box-shadow: var(--shadow-lift); }
+/* Two-up, for the About page's Vision and Mission. */
+.pillars--two { grid-template-columns: repeat(2, 1fr); }
+/* The statement is the card's whole point, so it carries the weight the
+   three-up cards give to a short headline plus a body paragraph. */
+.pillar--statement h3 {
+  font-size: clamp(19px, 2vw, 23px);
+  line-height: 1.42;
+  letter-spacing: -.01em;
+  margin-bottom: 0;
+}
 .pillar--green  { background: #0C9449; color: #fff; }
 .pillar--yellow { background: var(--yellow-warm); color: var(--ink); }
 .pillar--red    { background: #FF1C16; color: #fff; }
@@ -1679,127 +1689,108 @@ a.footer__contact-value:hover { color: var(--green); }
 /* --------------------------------------------------------------------------
    Corporate philosophy
    -------------------------------------------------------------------------- */
-.philosophy {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 20px;
-}
-.philosophy__card {
-  padding: clamp(26px, 3.4vw, 38px);
-  background: rgba(255,255,255,.09);
-  border: 1px solid rgba(255,255,255,.16);
-  border-radius: var(--radius-lg);
-  transition: background-color .25s var(--ease), transform .25s var(--ease);
-}
-.philosophy__card:hover { background: rgba(255,255,255,.14); transform: translateY(-3px); }
-.philosophy__card h3 {
-  margin-block: 20px 12px;
-  font-size: clamp(22px, 2.4vw, 28px);
-  font-weight: 700;
-  letter-spacing: -.02em;
-  color: #fff;
-}
-.philosophy__card p { font-size: 16.5px; line-height: 1.66; color: var(--body-fg-dark); }
-.philosophy__card strong { color: #fff; font-weight: 700; }
-
 /* --------------------------------------------------------------------------
-   Core values — one panel at a time, advancing on its own
+   Core values — each value takes the whole section in its own brand colour
    -------------------------------------------------------------------------- */
-.values__tabs {
+.values-section {
+  transition: background-color .7s var(--ease), color .7s var(--ease);
+}
+.values-section--green {
+  background: #0C9449;
+  --on-tone: #fff;
+  --on-tone-dim: rgba(255,255,255,.78);
+  --on-tone-line: rgba(255,255,255,.28);
+  --on-tone-mute: rgba(255,255,255,.34);
+}
+.values-section--yellow {
+  background: var(--yellow-warm);
+  --on-tone: var(--ink);
+  --on-tone-dim: rgba(18,16,16,.72);
+  --on-tone-line: rgba(18,16,16,.2);
+  --on-tone-mute: rgba(18,16,16,.26);
+}
+.values-section--red {
+  background: #FF1C16;
+  --on-tone: #fff;
+  --on-tone-dim: rgba(255,255,255,.82);
+  --on-tone-line: rgba(255,255,255,.3);
+  --on-tone-mute: rgba(255,255,255,.36);
+}
+
+.values-section h2,
+.values-section .values__count,
+.values-section .values__name { color: var(--on-tone); }
+.values-section .eyebrow { color: var(--on-tone-dim); }
+
+/* The number and the mark, above a rule that runs the width of the column. */
+.values__bar {
   display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 22px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--on-tone-line);
 }
-.values__tab {
-  position: relative;
-  overflow: hidden;
-  padding: 11px 22px 13px;
-  border: 1px solid var(--line);
+.values__count {
+  font-size: clamp(28px, 3.4vw, 40px);
+  font-weight: 500;
+  letter-spacing: -.03em;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+.values__count span { font-size: .45em; color: var(--on-tone-mute); }
+.values__icon {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 52px;
+  height: 52px;
   border-radius: var(--pill);
-  background: transparent;
-  font-size: 12px; font-weight: 500; letter-spacing: .16em;
-  text-transform: uppercase; color: var(--body-fg);
-  transition: border-color .2s var(--ease), color .2s var(--ease), background-color .2s var(--ease);
+  border: 1px solid var(--on-tone-line);
+  color: var(--on-tone);
 }
-/* Each tab carries its own value's accent, so the colour a reader sees on the
-   tab is the colour of the panel it opens. */
-.values__tab--green { --value-tone: var(--green); }
-.values__tab--amber { --value-tone: var(--amber); }
-.values__tab--red   { --value-tone: var(--red-soft); }
-
-.values__tab:hover { border-color: var(--value-tone); color: var(--value-tone); }
-.values__tab.is-active {
-  background: var(--value-tone);
-  border-color: var(--value-tone);
-  color: #fff;
+.values__icon svg {
+  width: 24px; height: 24px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
-/* Fills across the active tab over one interval, so the next slide is never a
-   surprise. Paused with the rotation, and absent entirely under reduced motion. */
-.values__tab-rail {
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  height: 2px;
-  width: 100%;
-  transform: scaleX(0);
-  transform-origin: left;
-  background: rgba(255,255,255,.72);
-}
-.values__tab-rail[data-running="true"] { animation: values-rail linear forwards; }
-@keyframes values-rail { from { transform: scaleX(0); } to { transform: scaleX(1); } }
-
-.values__panel {
-  padding: clamp(26px, 3.6vw, 42px);
-  background: #fff;
-  border: 1px solid rgba(18,16,16,.07);
-  border-left: 3px solid var(--green);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-card);
-  animation: values-in .5s var(--ease) both;
-}
-.values__panel--green { border-left-color: var(--green); }
-.values__panel--amber { border-left-color: var(--amber); }
-.values__panel--red   { border-left-color: var(--red-soft); }
+.values__slide { animation: values-in .55s var(--ease) both; }
 @keyframes values-in {
-  from { opacity: 0; transform: translateY(14px); }
+  from { opacity: 0; transform: translateY(16px); }
   to   { opacity: 1; transform: none; }
 }
 
-.values__head {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
-  align-items: start;
-  gap: 18px;
-  padding-bottom: 24px;
-  border-bottom: 1px solid rgba(18,16,16,.1);
-}
 .values__name {
-  font-size: clamp(24px, 2.8vw, 32px);
+  margin-top: 28px;
+  font-size: clamp(38px, 6vw, 76px);
   font-weight: 700;
-  letter-spacing: -.02em;
-  color: var(--ink);
+  letter-spacing: -.035em;
+  line-height: 1;
 }
-.values__line { margin-top: 8px; max-width: 52ch; font-size: 15.5px; color: var(--body-fg); }
-.values__count {
-  font-size: 24px; font-weight: 500; letter-spacing: -.02em;
-  color: var(--ink); font-variant-numeric: tabular-nums;
+.values__line {
+  margin-top: 16px;
+  max-width: 46ch;
+  font-size: clamp(17px, 2vw, 23px);
+  line-height: 1.55;
+  color: var(--on-tone-dim);
 }
-.values__count span { font-size: 14px; color: #A9A39D; }
 
 .values__points {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 18px 34px;
-  margin-top: 26px;
+  gap: 18px 44px;
+  margin-top: clamp(32px, 4vw, 46px);
 }
 .values__points li {
   position: relative;
-  padding-left: 20px;
-  font-size: 15.5px;
-  line-height: 1.62;
-  color: var(--body-fg);
+  padding-left: clamp(20px, 1.8vw, 26px);
+  font-size: clamp(16px, 1.5vw, 20px);
+  line-height: 1.6;
+  color: var(--on-tone-dim);
 }
 /* A dot on the text's own first line, so wrapped lines align under the first. */
 .values__points li::before {
@@ -1807,27 +1798,58 @@ a.footer__contact-value:hover { color: var(--green); }
   position: absolute;
   left: 1px;
   top: .56em;
-  width: 7px;
-  height: 7px;
+  width: .44em;
+  height: .44em;
   border-radius: 50%;
-  background: var(--green);
+  background: currentColor;
+  opacity: .55;
 }
-.values__panel--amber .values__points li::before { background: var(--amber); }
-.values__panel--red .values__points li::before   { background: var(--red-soft); }
+
+/* Dots double as the tab list. The active one is a pill that fills across one
+   interval, so the handover is visible coming rather than a surprise. */
+.values__dots {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: clamp(34px, 4vw, 48px);
+}
+.values__dot {
+  position: relative;
+  overflow: hidden;
+  width: 10px;
+  height: 10px;
+  padding: 0;
+  border-radius: var(--pill);
+  background: var(--on-tone-mute);
+  transition: width .45s var(--ease), background-color .3s var(--ease);
+}
+.values__dot:hover { background: var(--on-tone-dim); }
+.values__dot.is-active { width: 54px; background: var(--on-tone-mute); }
+.values__dot-fill {
+  position: absolute;
+  inset: 0;
+  transform: scaleX(0);
+  transform-origin: left;
+  border-radius: inherit;
+  background: var(--on-tone);
+}
+.values__dot-fill[data-running="true"] { animation: values-fill linear forwards; }
+/* Paused or reduced-motion: the active dot still reads as filled. */
+.values__dot.is-active .values__dot-fill[data-running="false"] { transform: scaleX(1); }
+@keyframes values-fill { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 
 @media (prefers-reduced-motion: reduce) {
-  .values__panel { animation: none; }
-  .values__tab-rail { animation: none !important; }
+  .values-section { transition: none; }
+  .values__slide { animation: none; }
+  .values__dot-fill { animation: none !important; }
 }
 
 @media (max-width: 980px) {
   .about-history { grid-template-columns: 1fr; }
   .about-history__media { position: static; }
-  .philosophy { grid-template-columns: 1fr; }
+  .pillars--two { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 720px) {
-  .values__head { grid-template-columns: auto minmax(0, 1fr); }
-  .values__count { grid-column: 2; margin-top: 4px; }
   .values__points { grid-template-columns: 1fr; gap: 14px; }
 }
